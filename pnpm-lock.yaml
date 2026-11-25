@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@colyseus/schema@5.0.8':
+    hash: 4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464
+    path: patches/@colyseus__schema@5.0.8.patch
+
 importers:
 
   .:
     devDependencies:
       '@colyseus/schema':
         specifier: ^5.0.6
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@types/debug':
         specifier: ^0.0.31
         version: 0.0.31
@@ -125,7 +130,7 @@ importers:
         version: link:../../packages/transport/h3-transport
       '@colyseus/schema':
         specifier: ^5.0.8
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@colyseus/sdk':
         specifier: workspace:^
         version: link:../../packages/sdk
@@ -444,7 +449,7 @@ importers:
         version: link:../presence/redis-presence
       '@colyseus/schema':
         specifier: ^5.0.8
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@colyseus/tools':
         specifier: workspace:^
         version: link:../tools
@@ -574,7 +579,7 @@ importers:
         version: link:../presence/redis-presence
       '@colyseus/schema':
         specifier: ^5.0.8
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@colyseus/sdk':
         specifier: workspace:^
         version: link:../sdk
@@ -840,7 +845,7 @@ importers:
         version: link:../better-call/packages/better-call
       '@colyseus/schema':
         specifier: ^5.0.8
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@colyseus/shared-types':
         specifier: workspace:^0.18.2
         version: link:../shared-types
@@ -937,7 +942,7 @@ importers:
         version: link:../../core
       '@colyseus/schema':
         specifier: ^5.0.6
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
 
   packages/shared-types:
     dependencies:
@@ -969,7 +974,7 @@ importers:
         version: link:../core
       '@colyseus/schema':
         specifier: ^5.0.8
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@colyseus/sdk':
         specifier: workspace:^
         version: link:../sdk
@@ -1056,7 +1061,7 @@ importers:
         version: link:../../core
       '@colyseus/schema':
         specifier: ^5.0.0
-        version: 5.0.8(typescript@6.0.3)
+        version: 5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)
       '@fails-components/webtransport':
         specifier: ^1.6.2
         version: 1.6.2
@@ -6617,10 +6622,6 @@ packages:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
 
-  iconv-lite@0.7.2:
-    resolution: {integrity: sha512-im9DjEDQ55s9fL4EYzOAv0yMqmMBSZp6G0VvFyTMPKWxiSBHUj9NW/qqLmXUwXrrM7AvqSlTCfvqRb0cM8yYqw==}
-    engines: {node: '>=0.10.0'}
-
   iconv-lite@0.7.3:
     resolution: {integrity: sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ==}
     engines: {node: '>=0.10.0'}
@@ -10483,7 +10484,7 @@ snapshots:
 
   '@colyseus/clock@2.0.3': {}
 
-  '@colyseus/schema@5.0.8(typescript@6.0.3)':
+  '@colyseus/schema@5.0.8(patch_hash=4ae6ea15d1de9eb85530d8a1214774c5e156143151558b24588010d87eaf0464)(typescript@6.0.3)':
     dependencies:
       typescript: 6.0.3
 
@@ -15108,11 +15109,6 @@ snapshots:
       safer-buffer: 2.1.2
     optional: true
 
-  iconv-lite@0.7.2:
-    dependencies:
-      safer-buffer: 2.1.2
-    optional: true
-
   iconv-lite@0.7.3:
     dependencies:
       safer-buffer: 2.1.2
@@ -15610,7 +15606,7 @@ snapshots:
       jest-util: 28.1.3
       natural-compare: 1.4.0
       pretty-format: 28.1.3
-      semver: 7.8.1
+      semver: 7.8.6
     transitivePeerDependencies:
       - supports-color
 
@@ -17707,7 +17703,7 @@ snapshots:
       '@js-joda/core': 5.7.0
       '@types/node': 22.19.19
       bl: 6.1.6
-      iconv-lite: 0.7.2
+      iconv-lite: 0.7.3
       js-md4: 0.3.2
       native-duplexpair: 1.0.0
       sprintf-js: 1.1.3

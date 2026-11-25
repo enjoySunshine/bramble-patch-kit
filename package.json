@@ -61,5 +61,10 @@
   "engines": {
     "node": ">=22.0.0",
     "pnpm": ">=8.15.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@colyseus/schema@5.0.8": "patches/@colyseus__schema@5.0.8.patch"
+    }
   }
 }

@@ -1,0 +1,177 @@
+diff --git a/build/index.cjs b/build/index.cjs
+index c9b6ac1..2f299fd 100644
+--- a/build/index.cjs
++++ b/build/index.cjs
+@@ -177,8 +177,17 @@ const utf8Length = (hasBufferByteLength)
+                 length += 3;
+             }
+             else {
+-                i++;
+-                length += 4;
++                // Surrogate range: only a high surrogate directly followed by
++                // a low surrogate forms a 4-byte pair. A lone surrogate is
++                // written as its own 3-byte sequence (see utf8Write).
++                const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++                if (next >= 0xdc00 && next < 0xe000) {
++                    i++;
++                    length += 4;
++                }
++                else {
++                    length += 3;
++                }
+             }
+         }
+         return length;
+@@ -202,13 +211,27 @@ function utf8Write(view, str, it) {
+             it.offset += 3;
+         }
+         else {
+-            i++;
+-            c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+-            view[it.offset] = 0xf0 | (c >> 18);
+-            view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
+-            view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
+-            view[it.offset + 3] = 0x80 | (c & 0x3f);
+-            it.offset += 4;
++            // Surrogate range (0xd800-0xdfff): only a high surrogate directly
++            // followed by a low surrogate forms a pair (4 bytes). A lone
++            // surrogate is written as its own 3-byte sequence so the length
++            // prefix (Buffer.byteLength counts it as 3) matches the bytes
++            // written, and the decoder reads the same code unit back.
++            const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++            if (next >= 0xdc00 && next < 0xe000) {
++                i++;
++                c = 0x10000 + (((c & 0x3ff) << 10) | (next & 0x3ff));
++                view[it.offset] = 0xf0 | (c >> 18);
++                view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
++                view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
++                view[it.offset + 3] = 0x80 | (c & 0x3f);
++                it.offset += 4;
++            }
++            else {
++                view[it.offset] = 0xe0 | (c >> 12);
++                view[it.offset + 1] = 0x80 | (c >> 6 & 0x3f);
++                view[it.offset + 2] = 0x80 | (c & 0x3f);
++                it.offset += 3;
++            }
+         }
+     }
+ }
+diff --git a/build/index.js b/build/index.js
+index 55d1803..2cb9d04 100644
+--- a/build/index.js
++++ b/build/index.js
+@@ -181,8 +181,17 @@
+                     length += 3;
+                 }
+                 else {
+-                    i++;
+-                    length += 4;
++                    // Surrogate range: only a high surrogate directly followed by
++                    // a low surrogate forms a 4-byte pair. A lone surrogate is
++                    // written as its own 3-byte sequence (see utf8Write).
++                    const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++                    if (next >= 0xdc00 && next < 0xe000) {
++                        i++;
++                        length += 4;
++                    }
++                    else {
++                        length += 3;
++                    }
+                 }
+             }
+             return length;
+@@ -206,13 +215,27 @@
+                 it.offset += 3;
+             }
+             else {
+-                i++;
+-                c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+-                view[it.offset] = 0xf0 | (c >> 18);
+-                view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
+-                view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
+-                view[it.offset + 3] = 0x80 | (c & 0x3f);
+-                it.offset += 4;
++                // Surrogate range (0xd800-0xdfff): only a high surrogate directly
++                // followed by a low surrogate forms a pair (4 bytes). A lone
++                // surrogate is written as its own 3-byte sequence so the length
++                // prefix (Buffer.byteLength counts it as 3) matches the bytes
++                // written, and the decoder reads the same code unit back.
++                const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++                if (next >= 0xdc00 && next < 0xe000) {
++                    i++;
++                    c = 0x10000 + (((c & 0x3ff) << 10) | (next & 0x3ff));
++                    view[it.offset] = 0xf0 | (c >> 18);
++                    view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
++                    view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
++                    view[it.offset + 3] = 0x80 | (c & 0x3f);
++                    it.offset += 4;
++                }
++                else {
++                    view[it.offset] = 0xe0 | (c >> 12);
++                    view[it.offset + 1] = 0x80 | (c >> 6 & 0x3f);
++                    view[it.offset + 2] = 0x80 | (c & 0x3f);
++                    it.offset += 3;
++                }
+             }
+         }
+     }
+diff --git a/build/index.mjs b/build/index.mjs
+index f39c252..ad353e1 100644
+--- a/build/index.mjs
++++ b/build/index.mjs
+@@ -175,8 +175,17 @@ const utf8Length = (hasBufferByteLength)
+                 length += 3;
+             }
+             else {
+-                i++;
+-                length += 4;
++                // Surrogate range: only a high surrogate directly followed by
++                // a low surrogate forms a 4-byte pair. A lone surrogate is
++                // written as its own 3-byte sequence (see utf8Write).
++                const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++                if (next >= 0xdc00 && next < 0xe000) {
++                    i++;
++                    length += 4;
++                }
++                else {
++                    length += 3;
++                }
+             }
+         }
+         return length;
+@@ -200,13 +209,27 @@ function utf8Write(view, str, it) {
+             it.offset += 3;
+         }
+         else {
+-            i++;
+-            c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
+-            view[it.offset] = 0xf0 | (c >> 18);
+-            view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
+-            view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
+-            view[it.offset + 3] = 0x80 | (c & 0x3f);
+-            it.offset += 4;
++            // Surrogate range (0xd800-0xdfff): only a high surrogate directly
++            // followed by a low surrogate forms a pair (4 bytes). A lone
++            // surrogate is written as its own 3-byte sequence so the length
++            // prefix (Buffer.byteLength counts it as 3) matches the bytes
++            // written, and the decoder reads the same code unit back.
++            const next = (c < 0xdc00 && i + 1 < l) ? str.charCodeAt(i + 1) : 0;
++            if (next >= 0xdc00 && next < 0xe000) {
++                i++;
++                c = 0x10000 + (((c & 0x3ff) << 10) | (next & 0x3ff));
++                view[it.offset] = 0xf0 | (c >> 18);
++                view[it.offset + 1] = 0x80 | (c >> 12 & 0x3f);
++                view[it.offset + 2] = 0x80 | (c >> 6 & 0x3f);
++                view[it.offset + 3] = 0x80 | (c & 0x3f);
++                it.offset += 4;
++            }
++            else {
++                view[it.offset] = 0xe0 | (c >> 12);
++                view[it.offset + 1] = 0x80 | (c >> 6 & 0x3f);
++                view[it.offset + 2] = 0x80 | (c & 0x3f);
++                it.offset += 3;
++            }
+         }
+     }
+ }

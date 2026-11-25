@@ -59,7 +59,7 @@ export default function App() {
             <a href="https://github.com/sponsors/endel" className="text-purple-700 hover:text-purple-500 dark:text-purple-400" target="_blank"> ❤️ Become a Sponsor</a>
             &nbsp;|&nbsp;
             <a
-              href="
+              href="https://github.com/colyseus/colyseus"
               target="_blank"
               className="text-purple-700 hover:text-purple-500 dark:text-purple-400"
               rel="noopener noreferrer"
